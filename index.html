@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,7 +24,6 @@
       padding: 0;
     }
 
-    /* Phone Container – exactly full screen on mobile */
     .phone-container {
       width: 100%;
       max-width: 430px;
@@ -87,11 +87,12 @@
       font-size: 20px;
       font-weight: 500;
       margin-bottom: 4px;
+      opacity: 0.85;
     }
 
     .banner-phone {
       font-size: 15px;
-      opacity: 0.9;
+      opacity: 0.75;
       margin-bottom: 12px;
     }
 
@@ -182,18 +183,20 @@
       background-color: white;
       padding: 12px 16px;
       border-bottom: 1px solid #EAEAEA;
+      transition: background-color 0.2s ease;
     }
 
     .input-data-block label {
       font-size: 13px;
-      color: #008cd6;
+      color: #757575;
       font-weight: 500;
       display: block;
       margin-bottom: 4px;
+      transition: color 0.2s ease;
     }
 
-    .grey-label {
-      color: #757575 !important;
+    .input-data-block.focused-edit label#amountInputLabel {
+      color: #008cd6 !important;
     }
 
     .input-row-flex {
@@ -232,8 +235,12 @@
     .static-value-text {
       font-size: 16px;
       font-weight: 600;
-      color: #757575;
       padding: 2px 0;
+    }
+
+    .less-visible-name {
+      color: #212121;
+      opacity: 0.65; /* Matches layout variance for text blending */
     }
 
     .chevron-link {
@@ -303,7 +310,7 @@
       border-radius: 10px;
     }
 
-    /* Account Drawer */
+    /* Dropdown Drawer */
     .account-select-drawer {
       position: absolute;
       background: white;
@@ -320,7 +327,7 @@
       cursor: pointer;
     }
 
-    /* MODAL MASK */
+    /* Confirmation Modal Container */
     .popup-window-mask {
       position: absolute;
       top: 0;
@@ -424,7 +431,7 @@
       cursor: pointer;
     }
 
-    /* SUCCESS SCREEN */
+    /* Success Layer view */
     .success-screen-layer {
       position: absolute;
       top: 0;
@@ -523,7 +530,7 @@
       pointer-events: none;
     }
 
-    /* EXACT CAPITEC REAL-TIME ACCURATE DOT LOADER STYLE */
+    /* 4-Dot System Loader Components */
     .four-dot-loader {
       display: flex;
       gap: 8px;
@@ -534,7 +541,7 @@
     .loader-dot {
       width: 11px;
       height: 11px;
-      border-radius: 2px; /* Slight square rounded look from application UI */
+      border-radius: 2px;
       animation: capitecPulse 1.2s infinite ease-in-out;
     }
 
@@ -561,9 +568,9 @@
   </div>
 
   <div id="accountSelectionMenu" class="account-select-drawer">
-    <div class="drawer-list-item" onclick="selectAccount('Main Account', 0.00, 39.00)">
+    <div class="drawer-list-item" onclick="selectAccount('Main Account', 506.08, 39.00)">
       <div class="account-main-title">Main Account</div>
-      <div class="account-balance-caption">Available balance R570.00</div>
+      <div class="account-balance-caption">Available balance R506.08</div>
     </div>
     <div class="drawer-list-item" onclick="selectAccount('Business trade emergency', 2.56, 0.01)">
       <div class="account-main-title">Business trade emergency</div>
@@ -592,33 +599,33 @@
         </div>
         <div>
           <div id="displayAccountTitle" class="account-main-title">Main Account</div>
-          <div id="displayAccountBalance" class="account-balance-caption">Available balance R0.00</div>
+          <div id="displayAccountBalance" class="account-balance-caption">Available balance R506.08</div>
         </div>
       </div>
       <span class="right-dots-toggle">&#x22EE;</span>
     </div>
 
-    <div class="input-data-block" style="margin-top: 14px;">
+    <div class="input-data-block" id="amountBoxContainer" style="margin-top: 14px;">
       <label id="amountInputLabel">Amount</label>
       <div class="input-row-flex">
         <span class="currency-symbol">R</span>
-        <input type="text" id="amountInputField" class="editable-field" value="39.00">
+        <input type="text" inputmode="decimal" id="amountInputField" class="editable-field" value="39.00" onfocus="handleAmountFocus()" onblur="handleAmountBlur()">
       </div>
       <div id="dynamicHistoryLine" class="history-timestamp-note">Last Paid: R29.00 on 8 Jun 2026 at 19:56</div>
     </div>
 
     <div class="input-data-block" style="margin-top: 14px;">
-      <label class="grey-label">Verified accountholder</label>
-      <div class="static-value-text" style="color:#212121;">Ms Mandiba</div>
+      <label style="color: #757575;">Verified accountholder</label>
+      <div class="static-value-text less-visible-name">Ms Mandiba</div>
     </div>
 
     <div class="input-data-block" style="margin-top: 14px;">
-      <label class="grey-label">Beneficiary reference</label>
+      <label style="color: #757575;">Beneficiary reference</label>
       <input type="text" id="beneficiaryRefInput" class="editable-field" value="V NDOU">
     </div>
 
     <div class="input-data-block" style="margin-top: 14px;">
-      <label class="grey-label">My statement description</label>
+      <label style="color: #757575;">My statement description</label>
       <input type="text" id="statementDescInput" class="editable-field" value="Kotass">
     </div>
 
@@ -712,6 +719,28 @@
     document.getElementById('accountSelectionMenu').style.display = 'none';
   }
 
+  function handleAmountFocus() {
+    document.getElementById('amountBoxContainer').classList.add('focused-edit');
+    const inputField = document.getElementById('amountInputField');
+    // Clear display if default zero baseline is present when user taps in
+    if (inputField.value === "0.00" || inputField.value === "00.00") {
+      inputField.value = "";
+    }
+  }
+
+  function handleAmountBlur() {
+    document.getElementById('amountBoxContainer').classList.remove('focused-edit');
+    const inputField = document.getElementById('amountInputField');
+    let val = parseFloat(inputField.value);
+    
+    // If field is cleared or invalid text remains, drop to structural default format
+    if (isNaN(val) || inputField.value.trim() === "") {
+      inputField.value = "0.00";
+    } else {
+      inputField.value = val.toFixed(2);
+    }
+  }
+
   function openConfirmationModal() {
     const fieldAmt = parseFloat(document.getElementById('amountInputField').value) || 0;
     document.getElementById('modalAmountTarget').textContent = "R" + fieldAmt.toFixed(2);
@@ -730,7 +759,6 @@
     const confirmBtn = document.getElementById('confirmPaymentButton');
     const originalText = confirmBtn.textContent;
     
-    // Inject the exact 4-dot system loader into the button text area
     confirmBtn.innerHTML = `
       <div class="four-dot-loader">
         <div class="loader-dot"></div>
@@ -757,7 +785,7 @@
 
   function resetPaymentWorkflowState() {
     document.getElementById('successLayoutView').style.display = 'none';
-    selectAccount('Main Account', 0.00, 39.00);
+    selectAccount('Main Account', 506.08, 39.00);
   }
 </script>
 </body>

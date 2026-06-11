@@ -5,6 +5,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Capitec Pay Replica · Academic Project</title>
+  
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Capitec Pay">
+
   <style>
     * {
       margin: 0;
@@ -240,7 +246,7 @@
 
     .less-visible-name {
       color: #212121;
-      opacity: 0.65; /* Matches layout variance for text blending */
+      opacity: 0.65;
     }
 
     .chevron-link {
@@ -722,7 +728,6 @@
   function handleAmountFocus() {
     document.getElementById('amountBoxContainer').classList.add('focused-edit');
     const inputField = document.getElementById('amountInputField');
-    // Clear display if default zero baseline is present when user taps in
     if (inputField.value === "0.00" || inputField.value === "00.00") {
       inputField.value = "";
     }
@@ -733,7 +738,6 @@
     const inputField = document.getElementById('amountInputField');
     let val = parseFloat(inputField.value);
     
-    // If field is cleared or invalid text remains, drop to structural default format
     if (isNaN(val) || inputField.value.trim() === "") {
       inputField.value = "0.00";
     } else {
